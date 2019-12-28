@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+
+exec env JAVA_OPTS="-Xmx256m" -DKEY_SIPGATE_USER="${KEY_SIPGATE_USER}" -DKEY_SIPGATE_PASSWORD="${KEY_SIPGATE_PASSWORD}" -DKEY_SIPGATE_FAXLINE="${KEY_SIPGATE_FAXLINE}" -DKEY_SIPGATE_RECIPIENT="${KEY_SIPGATE_RECIPIENT}" -DKEY_SECRET="${KEY_SECRET}" -DKEY_STRIPE_SECRET="${KEY_STRIPE_SECRET}" -DKEY_DOMAIN="${KEY_DOMAIN}"  -cp endpoint-adjudication-jar-with-dependencies.jar de.olyro.endpoint_adjudication.Main

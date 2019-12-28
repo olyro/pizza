@@ -1,0 +1,6 @@
+target/
+db/*
+node_modules/
+.settings/
+.vscode/
+.DS_Store

@@ -1,0 +1,26 @@
+{{> header}}
+<div class="container">
+    <h1 class="title">Bestellungen</h1>
+    <a class="btn btn-primary mb-1 float-right" href="/order">+ Neue Bestellung</a>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Inhalt</th>
+          <th scope="col">Preis</th>
+          <th scope="col">Bezahlt</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#items}}
+        <tr class="{{class}}">
+          <th scope="row">{{name}}</th>
+          <td>{{content}}</td>
+          <td>{{price}}</td>
+          <td>{{payed}}</td>
+        </tr>
+        {{/items}}
+      </tbody>
+    </table>
+</div>
+{{> footer}}

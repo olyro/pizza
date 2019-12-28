@@ -1,0 +1,27 @@
+.max-height {
+    max-height: 3em;
+    overflow-y: scroll;
+}
+
+.sending {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (min-width: 50em) {
+    .max-height {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+tr.payed {
+    background-color: green;
+    color: white;
+}
+
+tr.payed a {
+    color: white;
+}

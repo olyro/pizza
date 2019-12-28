@@ -1,0 +1,61 @@
+{{> header}}
+    <div class="container">
+        <h2 class="title">Deine Bestellung</h2>
+        <div id="react-container">
+            {{^selectedItem}}
+                <form action="/order" method="GET">
+                    <div class="form-group">
+                        <label for="item">Pizza</label>
+                        <select class="form-control" id="item" name="item">
+                        {{#items}}
+                            {{#item}}
+                            <option value="{{id}}">{{name}}</option>
+                            {{/item}}
+                        {{/items}}
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Weiter</button>
+                </form>
+            {{/selectedItem}}
+            {{#selectedItem}}
+                <form action="/order" method="POST">
+                    <div>
+                    <label for="name">Name/Pseudonym</label>
+                    <input class="form-control" name="name" id="name" required>
+                    </div>
+                    {{#item}}
+                        <div class="form-group">
+                            <label for="item">Pizza</label>
+                            <select class="form-control" id="item" name="item" disabled>
+                                <option value="{{id}}">{{name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="size">Größe</label>
+                            <select class="form-control" id="size" name="size">
+                                {{#sizes}}
+                                <option value="{{name}}">{{name}}</option>
+                                {{/sizes}}
+                            </select>
+                        </div>
+                        <label>Extras</label>
+                        <div class="max-height">
+                            {{#extras}}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="{{id}}" id="{{id}}">
+                                <label class="form-check-label" for="{{id}}">
+                                    {{name}}
+                                </label>
+                            </div>
+                            {{/extras}}
+                        </div>
+                    {{/item}}
+                    <div class="sending">
+                        <a href="/order">Zurück</a>
+                        <button class="btn btn-primary" type="submit">Senden</button>
+                    </div>
+                </form>
+            {{/selectedItem}}
+        </div>
+    </div>
+{{> footer}}

@@ -1,0 +1,14 @@
+
+{{> header}}
+<div class="container">
+    <h1>Deine Bestellung</h1>
+    <p>Name: {{name}}</p>
+    <p>Inhalt: {{content}}</p>
+    <p>Preis: {{price}}</p>
+    <p>Bezahlt: {{payed}}</p>
+    {{#showPayment}}
+    <p>Online bezahlen: </p>
+    <a class="btn btn-primary" href="/pay/giropay/{{id}}">Mit Giropay bezahlen</a>
+    {{/showPayment}}
+</div>
+{{> footer}}
