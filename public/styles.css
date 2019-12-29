@@ -25,3 +25,10 @@ tr.payed {
 tr.payed a {
     color: white;
 }
+
+.giropay {
+    display: flex;
+    justify-content: space-between;
+    width: 14em;
+    align-items: center;
+}

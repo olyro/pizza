@@ -8,7 +8,10 @@
     <p>Bezahlt: {{payed}}</p>
     {{#showPayment}}
     <p>Online bezahlen: </p>
-    <a target="_blank" class="btn btn-primary" href="/pay/giropay/{{id}}">Mit Giropay bezahlen</a>
+    <a target="_blank" class="btn btn-primary giropay" href="/pay/giropay/{{id}}">
+        <img src="/giropay.svg" alt="Giropay Logo" width="50" >
+        Mit Giropay bezahlen
+    </a>
     {{/showPayment}}
 </div>
 {{> footer}}

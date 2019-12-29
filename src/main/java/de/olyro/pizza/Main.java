@@ -120,7 +120,7 @@ public class Main {
                 data.put("name", order.get().name);
                 data.put("content", makeOrderString(order.get(), items));
                 data.put("payed", order.get().payed ? "Ja" : "Nein");
-                data.put("price", calcPrice(order.get(), items));
+                data.put("price", makePriceString(calcPrice(order.get(), items)));
                 data.put("id", order.get().id);
                 if (!order.get().payed) {
                     data.put("showPayment", "show");

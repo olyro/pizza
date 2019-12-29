@@ -2,7 +2,7 @@ version: '3'
 
 services:
  pizza:
-   image: olyro/pizza:1.0
+   image: raytracer/pizza:latest
    container_name: pizza
    restart: always
    volumes:
