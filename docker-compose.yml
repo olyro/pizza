@@ -1,7 +1,7 @@
 version: '3'
 
 services:
- postgres:
+ pizza:
    image: olyro/pizza:1.0
    container_name: pizza
    restart: always
