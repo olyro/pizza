@@ -1,5 +1,5 @@
 /* tslint:disable */
-// Generated using typescript-generator version 2.8.449 on 2019-12-29 14:42:45.
+// Generated using typescript-generator version 2.8.449 on 2019-12-29 15:20:45.
 
 export interface GetOrder {
     id: string;
