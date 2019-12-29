@@ -33,6 +33,8 @@ public class PayController {
                 redirectParams.put("return_url",
                         System.getProperty(Main.KEY_DOMAIN) + "/pay/giropay/processing/" + order.get().id);
 
+                sourceParams.put("redirect", redirectParams);
+
                 var src = Source.create(sourceParams);
                 ctx.redirect(src.getRedirect().getUrl());
                 return ctx;
@@ -44,6 +46,7 @@ public class PayController {
             ctx.status(HttpStatus.BAD_REQUEST_400);
             return ctx.render("Datenbankfehler");
         } catch (Exception e) {
+            e.printStackTrace();
             ctx.status(HttpStatus.BAD_REQUEST_400);
             return ctx.html("Keine Id");
         }

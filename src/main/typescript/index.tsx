@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Order, MenuItem } from "../../../generated_types";
-import { AdminInterface } from "./admin";
+import { AdminInterface, calcPrice } from "./admin";
 
 interface PizzaFormProps {
     pizza?: string;
@@ -139,6 +139,7 @@ export class PizzaForm extends React.Component<PizzaFormProps, PizzaFormState> {
                 <div className="max-height">
                     {this.renderExtras()}
                 </div>
+                <div className="mt-1 mb-1 text-center font-weight-bold">Der Gesamtpreis beträgt {renderPrice(calcPrice(this.state.order, this.state.menuItems))}</div>
                 <div className="sending">
                     <button className="btn btn-primary" type="submit">Senden</button>
                 </div>

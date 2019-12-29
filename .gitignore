@@ -4,3 +4,5 @@ node_modules/
 .settings/
 .vscode/
 .DS_Store
+.env
+pizza.tar

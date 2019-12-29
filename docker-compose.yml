@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+ postgres:
+   image: olyro/pizza:1.0
+   container_name: pizza
+   restart: always
+   volumes:
+     - pizza:/pizza/db
+   environment:
+     - KEY_SIPGATE_USER=${KEY_SIPGATE_USER}
+     - KEY_SIPGATE_PASSWORD=${KEY_SIPGATE_PASSWORD}
+     - KEY_SIPGATE_FAXLINE=${KEY_SIPGATE_FAXLINE}
+     - KEY_SIPGATE_RECIPIENT=${KEY_SIPGATE_RECIPIENT}
+     - KEY_SECRET=${KEY_SECRET}
+     - KEY_STRIPE_SECRET=${KEY_STRIPE_SECRET}
+     - KEY_DOMAIN=${KEY_DOMAIN}
+   ports:
+     - "127.0.0.1:9000:7000"
+
+
+volumes:
+ pizza:

@@ -162,9 +162,6 @@ public class Main {
             ws.onClose(ctx -> {
                 wsessions.remove(ctx);
             });
-
-            ws.onMessage(ctx -> {
-            });
         }, roles(UserRole.ADMIN));
     }
 

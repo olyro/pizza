@@ -14,11 +14,22 @@ interface AdminInterfaceState {
     faxStatus: FaxStatus
 }
 
+export let calcPrice = (order: Order, menuItems: Array<MenuItem>): number => {
+    if (menuItems.length === 0) return 0;
+    return order.items.map(oi => {
+        let menuItem = menuItems.find(mi => mi.item.id === oi.id)!;
+        let basePrice = menuItem.item.sizes.find(s => s.name === oi.size)!.price;
+        let extraPrices = oi.extraIds.map(eid => menuItem.extras.find(e => e.id === eid)!.sizes.find(s => s.name === oi.size)!.price).reduce((pv, cv) => pv + cv, 0);
+        return basePrice + extraPrices;
+    }).reduce((pv, cv) => pv + cv, 0);
+}
+
+
 export class AdminInterface extends React.Component<AdminInterfaceProps, AdminInterfaceState> {
     ws: WebSocket;
     constructor(props: AdminInterfaceProps) {
         super(props);
-        this.ws = new WebSocket(`ws://localhost:7000/websocket?key=${this.props.secretKey}`);
+        this.ws = new WebSocket(`wss://${location.host}/websocket?key=${this.props.secretKey}`);
         this.ws.onmessage = this.handleMessage;
         this.state = {
             orders: [],
@@ -56,15 +67,6 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
         }).join(", ");
     }
 
-    calcPrice = (order: Order): number => {
-        return order.items.map(oi => {
-            let menuItem = this.state.menuItems.find(mi => mi.item.id === oi.id)!;
-            let basePrice = menuItem.item.sizes.find(s => s.name === oi.size)!.price;
-            let extraPrices = oi.extraIds.map(eid => menuItem.extras.find(e => e.id === eid)!.sizes.find(s => s.name === oi.size)!.price).reduce((pv, cv) => pv + cv, 0);
-            return basePrice + extraPrices;
-        }).reduce((pv, cv) => pv + cv, 0);
-    }
-
     generateHandleCheck = (id: string) => {
         return async (event: React.ChangeEvent<HTMLInputElement>) => {
             let params = new URLSearchParams();
@@ -96,7 +98,7 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
             <tr className={order.payed ? "payed" : ""}>
                 <td><a title={order.id} href={`/myorder/${order.id}`}>{order.name}</a></td>
                 <td>{this.displayOrder(order)}</td>
-                <td>{renderPrice(this.calcPrice(order))}</td>
+                <td>{renderPrice(calcPrice(order, this.state.menuItems))}</td>
                 <td><input onChange={this.generateHandleCheck(order.id)} type="checkbox" checked={order.payed}></input></td>
                 <td>
                     <a onClick={this.generateHandleDelete(order.id)} href="#">Löschen</a>
@@ -171,7 +173,7 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
                         <label htmlFor="phone">Telefonnummer</label>
                         <input className="form-control" placeholder="Telefonnummer" onChange={event => this.setState({ phone: event.target.value })} id="phone" name="phone" value={this.state.phone} required></input>
                     </div>
-                    <button type="submit" className="btn btn-primary">Senden jetzt</button>
+                    <button type="submit" className="btn btn-primary">Senden</button>
                 </form>
                 <div className="mt-2">
                     {this.renderFaxStatus()}

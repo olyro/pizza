@@ -159,23 +159,24 @@ public class AdminController {
                             var faxStatusRequest = HttpRequest.newBuilder()
                                     .uri(new URI("https://api.sipgate.com/v2/history/" + sessionId.sessionId))
                                     .header("Content-Type", "application/json")
-                                    .header("Authorization", basicAuth(System.getProperty(""), System.getProperty("")))
+                                    .header("Authorization", basicAuth(System.getProperty(Main.KEY_SIPGATE_USER),
+                                            System.getProperty(Main.KEY_SIPGATE_PASSWORD)))
                                     .build();
 
                             var faxStatusResponseResponse = client.send(faxStatusRequest, BodyHandlers.ofString());
 
                             if (faxStatusResponseResponse.statusCode() == HttpStatus.OK_200) {
-                                var status = FaxStatus.PENDING;
                                 var parsedResponse = gson.fromJson(faxStatusResponseResponse.body(),
                                         StatusFaxSipgateResponse.class);
                                 if (parsedResponse.faxStatusType.equals("SENT")) {
-                                    status = FaxStatus.SENT;
-                                    break;
+                                    Main.broadcastMessage(new FaxMessage(FaxStatus.SENT), gson);
+                                    return;
                                 } else if (parsedResponse.faxStatusType.equals("FAILED")) {
-                                    status = FaxStatus.FAILED;
-                                    break;
+                                    Main.broadcastMessage(new FaxMessage(FaxStatus.FAILED), gson);
+                                    return;
+                                } else {
+                                    Main.broadcastMessage(new FaxMessage(FaxStatus.PENDING), gson);
                                 }
-                                Main.broadcastMessage(new FaxMessage(status), gson);
                             }
 
                             Thread.sleep(loopDuration);
@@ -186,7 +187,7 @@ public class AdminController {
                         }
                     }
                     Main.broadcastMessage(new FaxMessage(FaxStatus.TIMEOUT), gson);
-                });
+                }).start();
                 return ctx.json(true);
             } else {
                 ctx.status(500);
