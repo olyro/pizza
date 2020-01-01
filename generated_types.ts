@@ -1,5 +1,5 @@
 /* tslint:disable */
-// Generated using typescript-generator version 2.8.449 on 2019-12-29 21:46:27.
+// Generated using typescript-generator version 2.8.449 on 2020-01-01 23:44:30.
 
 export interface GetOrder {
     id: string;
@@ -47,6 +47,7 @@ export interface Item {
 
 export interface MenuItem {
     item: Item;
+    description: string;
     extras: Item[];
 }
 

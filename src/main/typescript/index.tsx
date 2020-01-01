@@ -88,7 +88,7 @@ export class PizzaForm extends React.Component<PizzaFormProps, PizzaFormState> {
     };
 
     renderPizzas = () => {
-        return this.state.menuItems.map(item => <option value={item.item.id}>{item.item.name}</option>);
+        return this.state.menuItems.map(item => <option value={item.item.id}>{`${item.item.name} ${item.description}`}</option>);
     }
 
 

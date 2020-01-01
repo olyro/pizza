@@ -1,5 +1,5 @@
 .max-height {
-    max-height: 3em;
+    max-height: 15em;
     overflow-y: scroll;
 }
 
@@ -13,7 +13,7 @@
 @media (min-width: 50em) {
     .max-height {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
 

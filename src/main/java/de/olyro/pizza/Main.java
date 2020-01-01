@@ -29,7 +29,6 @@ import de.olyro.pizza.models.Message;
 import de.olyro.pizza.models.Order;
 import de.olyro.pizza.models.OrderItem;
 import de.olyro.pizza.models.OrderMessage;
-import de.olyro.pizza.models.Size;
 import de.olyro.pizza.models.UserRole;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -50,12 +49,8 @@ public class Main {
 
     private static Set<WsContext> wsessions = ConcurrentHashMap.newKeySet();
     private static final String secretKey = System.getProperty(KEY_SECRET, "secret");
-    public static final List<Item> extras = Arrays
-            .asList(new Item("e1", "Tomaten", Arrays.asList(new Size("klein", 50))));
-    public static final List<MenuItem> items = Arrays.asList(
-            new MenuItem(new Item("p1", "Pizza Seafood mit viel Garnelen", Arrays.asList(new Size("klein", 300))),
-                    extras),
-            new MenuItem(new Item("p2", "Pizza Salami", Arrays.asList(new Size("klein", 400))), extras));
+    public static final List<Item> extras = Prices.getExtraItems();
+    public static final List<MenuItem> items = Prices.getTransformedMenuItems();
 
     public static void main(String[] args) throws SQLException {
         initDB();
