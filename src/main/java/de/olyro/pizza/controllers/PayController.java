@@ -80,7 +80,8 @@ public class PayController {
                 }
 
                 var data = new HashMap<String, Object>();
-                data.put("status", status);
+                data.put("status", status.equals("succeeded") ? "Zahlung erfoglreich" : "Zahlung fehlgeschlagen");
+                data.put("link", "/myorder/" + id);
                 return ctx.render("public/payment.mustache", data);
             } else {
                 ctx.status(HttpStatus.NOT_FOUND_404);
