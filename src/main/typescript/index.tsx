@@ -131,7 +131,7 @@ export class PizzaForm extends React.Component<PizzaFormProps, PizzaFormState> {
                 </div>
                 <div className="form-group">
                     <label htmlFor="size">Größe</label>
-                    <select className="form-control" id="size" name="size">
+                    <select onChange={this.setSize} className="form-control" id="size" name="size">
                         {this.renderSizes()}
                     </select>
                 </div>
