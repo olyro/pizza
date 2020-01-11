@@ -65,10 +65,12 @@ public class AdminController {
     public static class SendFax {
         public final String name;
         public final String phoneNumber;
+        public final String address;
 
-        public SendFax(String name, String phoneNumber) {
+        public SendFax(String name, String phoneNumber, String address) {
             this.name = name;
             this.phoneNumber = phoneNumber;
+            this.address = address;
         }
     }
 
@@ -116,9 +118,13 @@ public class AdminController {
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 14, BaseColor.BLACK);
 
             document.add(new Paragraph(input.name, font));
-            document.add(new Paragraph("Theodor-Boveri-Weg", font));
-            document.add(new Paragraph("Treffpunkt 8 Informatik", font));
-            document.add(new Paragraph("97074 Würzburg", font));
+            input.address.lines().forEach(line -> {
+                try {
+                    document.add(new Paragraph(line, font));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
             var last = new Paragraph(input.phoneNumber, font);
             last.setSpacingAfter(10);
             document.add(last);

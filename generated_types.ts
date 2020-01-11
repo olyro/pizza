@@ -1,5 +1,5 @@
 /* tslint:disable */
-// Generated using typescript-generator version 2.8.449 on 2020-01-01 23:44:30.
+// Generated using typescript-generator version 2.8.449 on 2020-01-11 20:24:56.
 
 export interface GetOrder {
     id: string;
@@ -8,6 +8,7 @@ export interface GetOrder {
 export interface SendFax {
     name: string;
     phoneNumber: string;
+    address: string;
 }
 
 export interface SendFaxSipgateRequest {

@@ -11,6 +11,7 @@ interface AdminInterfaceState {
     menuItems: Array<MenuItem>
     name: string
     phone: string
+    address: string
     faxStatus: FaxStatus
 }
 
@@ -36,6 +37,7 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
             menuItems: [],
             name: "",
             phone: "",
+            address: "Theodor-Boveri-Weg\nTreffpunkt 8 Informatik\n97074 Würzburg",
             faxStatus: "NOFAX"
         };
 
@@ -114,7 +116,7 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
         this.setState({ faxStatus: "NOFAX" });
         let params = new URLSearchParams();
         params.set("key", this.props.secretKey);
-        let response = fetch("/admin/sendFax?" + params.toString(), { method: "POST", body: JSON.stringify({ name: this.state.name, phoneNumber: this.state.phone } as SendFax) })
+        let response = fetch("/admin/sendFax?" + params.toString(), { method: "POST", body: JSON.stringify({ name: this.state.name, phoneNumber: this.state.phone, address: this.state.address } as SendFax) })
         if (await ((await response).json())) {
             alert("Bestellung erfolgreich");
         } else {
@@ -172,6 +174,10 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
                     <div className="form-group">
                         <label htmlFor="phone">Telefonnummer</label>
                         <input className="form-control" placeholder="Telefonnummer" onChange={event => this.setState({ phone: event.target.value })} id="phone" name="phone" value={this.state.phone} required></input>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="address">Adresse</label>
+                        <textarea rows={3} className="form-control" onChange={event => this.setState({ address: event.target.value })} id="address" name="address" value={this.state.address} required></textarea>
                     </div>
                     <button type="submit" className="btn btn-primary">Senden</button>
                 </form>
