@@ -133,14 +133,14 @@ public class Main {
                 if (order.isPresent()) {
                     if (!order.get().payed) {
                         Order.deleteOrder(id);
+                        ctx.redirect("/");
                     }
                 } else {
                     ctx.status(HttpStatus.NOT_FOUND_404);
+                    ctx.redirect("/myorder/" + id);
                 }
             } catch (SQLException e) {
                 ctx.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
-            } finally {
-                ctx.redirect("/myorder/" + id);
             }
         }, roles(UserRole.ANYONE));
         app.get("/order", ctx -> {

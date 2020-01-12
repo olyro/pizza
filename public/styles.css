@@ -1,5 +1,5 @@
 .max-height {
-    max-height: 15em;
+    max-height: 20em;
     overflow-y: scroll;
 }
 
@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-@media (min-width: 50em) {
+@media (min-width: 60em) {
     .max-height {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
