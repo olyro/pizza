@@ -27,11 +27,19 @@ export let calcPrice = (order: Order, menuItems: Array<MenuItem>): number => {
 
 
 export class AdminInterface extends React.Component<AdminInterfaceProps, AdminInterfaceState> {
-    ws: WebSocket;
     constructor(props: AdminInterfaceProps) {
         super(props);
-        this.ws = new WebSocket(`wss://${location.host}/websocket?key=${this.props.secretKey}`);
-        this.ws.onmessage = this.handleMessage;
+        let connect = () => {
+            let protocol = location.protocol === "http:" ? "ws:" : "wss:";
+            let ws = new WebSocket(`${protocol}//${location.host}/websocket?key=${this.props.secretKey}`);
+            ws.onmessage = this.handleMessage;
+            ws.onclose = () => {
+                setTimeout(() => connect(), 1000);
+            };
+        }
+
+        connect();
+
         this.state = {
             orders: [],
             menuItems: [],
@@ -100,7 +108,7 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
             <tr className={order.payed ? "payed" : ""}>
                 <td><a title={order.id} href={`/myorder/${order.id}`}>{order.name}</a></td>
                 <td>{this.displayOrder(order)}</td>
-                <td>{renderPrice(calcPrice(order, this.state.menuItems))}</td>
+                <td className="text-right">{renderPrice(calcPrice(order, this.state.menuItems))}</td>
                 <td><input onChange={this.generateHandleCheck(order.id)} type="checkbox" checked={order.payed}></input></td>
                 <td>
                     <a onClick={this.generateHandleDelete(order.id)} href="#">Löschen</a>
@@ -157,7 +165,7 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
                         <tr>
                             <th>Name</th>
                             <th>Inhalt</th>
-                            <th>Preis</th>
+                            <th className="text-right">Preis</th>
                             <th>Bezahlt</th>
                             <th>Aktionen</th>
                         </tr>
@@ -166,6 +174,7 @@ export class AdminInterface extends React.Component<AdminInterfaceProps, AdminIn
                         {this.state.orders.map(order => this.renderOrder(order))}
                     </tbody>
                 </table>
+                <p><strong>Gesamtpreis: {renderPrice(this.state.orders.map(o => calcPrice(o, this.state.menuItems)).reduce((pv, cv) => pv + cv, 0))}</strong></p>
                 <form onSubmit={this.sendFax}>
                     <div className="form-group">
                         <label htmlFor="name">Name</label>
