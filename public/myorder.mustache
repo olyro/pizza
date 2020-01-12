@@ -7,6 +7,7 @@
     <p>Preis: {{price}}</p>
     <p>Bezahlt: {{payed}}</p>
     {{#showPayment}}
+    <a href="/order/delete/{{id}}">Löschen</a>
     <p>Online bezahlen: </p>
     <a target="_blank" class="btn btn-primary giropay" href="/pay/giropay/{{id}}">
         <img src="/giropay.svg" alt="Giropay Logo" width="50" >

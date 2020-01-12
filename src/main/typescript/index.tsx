@@ -108,7 +108,7 @@ export class PizzaForm extends React.Component<PizzaFormProps, PizzaFormState> {
                         <input onChange={this.setExtra} className="form-check-input" type="checkbox" name={extra.id} id={extra.id}>
                         </input>
                         <label className="form-check-label" htmlFor={extra.id}>
-                            {extra.name}
+                            {extra.name} {renderPrice(extra.sizes.find(s => s.name === this.state.order.items[0].size)!.price)}
                         </label>
                     </div>
                 )

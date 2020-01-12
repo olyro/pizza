@@ -126,6 +126,23 @@ public class Main {
         app.get("/menu", ctx -> {
             ctx.json(items);
         }, roles(UserRole.ANYONE));
+        app.get("/order/delete/:id", ctx -> {
+            var id = ctx.pathParam("id");
+            try {
+                var order = Order.getOrder(id);
+                if (order.isPresent()) {
+                    if (!order.get().payed) {
+                        Order.deleteOrder(id);
+                    }
+                } else {
+                    ctx.status(HttpStatus.NOT_FOUND_404);
+                }
+            } catch (SQLException e) {
+                ctx.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+            } finally {
+                ctx.redirect("/myorder/" + id);
+            }
+        }, roles(UserRole.ANYONE));
         app.get("/order", ctx -> {
             var data = new HashMap<String, Object>();
             data.put("items", items);
