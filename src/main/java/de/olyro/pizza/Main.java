@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,6 +88,11 @@ public class Main {
                 try {
                     var orginalOrder = ctx.bodyAsClass(Order.class);
                     var order = new Order(id, orginalOrder.name, false, orginalOrder.items);
+                    if (!validateOrder(order, items)) {
+                        ctx.status(HttpStatus.BAD_REQUEST_400);
+                        ctx.json(false);
+                        return;
+                    }
                     Order.createOrder(order);
                     broadcastMessage(new OrderMessage(Order.getOrders()), gson);
                     ctx.json(order);
@@ -99,13 +105,28 @@ public class Main {
                 var name = ctx.formParam("name");
                 var item = ctx.formParam("item");
                 var size = ctx.formParam("size");
-                MenuItem mi = items.stream().filter(it -> it.item.id.equals(item)).findFirst().get();
-                var ex = mi.extras.stream().filter(extra -> ctx.formParam(extra.id) != null).map(extra -> extra.id)
-                        .collect(Collectors.toList());
-                var order = new Order(id, name, false, Arrays.asList(new OrderItem(item, size, ex)));
-                Order.createOrder(order);
-                broadcastMessage(new OrderMessage(Order.getOrders()), gson);
-                ctx.redirect("/myorder/" + id);
+                try {
+                    MenuItem mi = items.stream().filter(it -> it.item.id.equals(item)).findFirst().get();
+                    var ex = mi.extras.stream().filter(extra -> ctx.formParam(extra.id) != null).map(extra -> extra.id)
+                            .collect(Collectors.toList());
+                    var order = new Order(id, name, false, Arrays.asList(new OrderItem(item, size, ex)));
+                    if (!validateOrder(order, items)) {
+                        ctx.status(HttpStatus.BAD_REQUEST_400);
+                        ctx.redirect("/order");
+                        return;
+                    }
+                    Order.createOrder(order);
+                    broadcastMessage(new OrderMessage(Order.getOrders()), gson);
+                    ctx.redirect("/myorder/" + id);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    ctx.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+                    ctx.redirect("/order");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ctx.status(HttpStatus.BAD_REQUEST_400);
+                    ctx.redirect("/order");
+                }
             }
         }, roles(UserRole.ANYONE));
         app.get("/myorder/:id", ctx -> {
@@ -203,6 +224,19 @@ public class Main {
             result += ")";
         }
         return result;
+    }
+
+    private static boolean validateOrder(Order o, List<MenuItem> items) {
+        return o.name != null && !o.name.isEmpty() && o.items.stream().allMatch(oi -> {
+            Optional<MenuItem> menuItem = items.stream().filter(item -> oi.id.equals(item.item.id)).findAny();
+            if (menuItem.isPresent()) {
+                return oi.extraIds.stream().allMatch(
+                        eid -> menuItem.get().extras.stream().map(extra -> extra.id).anyMatch(id -> eid.equals(id)))
+                        && menuItem.get().item.sizes.stream().anyMatch(size -> size.name.equals(oi.size));
+            } else {
+                return false;
+            }
+        });
     }
 
     private static String makeOrderString(Order o, List<MenuItem> items) {
