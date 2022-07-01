@@ -16,7 +16,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
+      uses: elgohr/Publish-Docker-Github-Action@v4
       with:
         name: raytracer/pizza
         username: ${{ secrets.DOCKER_USERNAME }}
